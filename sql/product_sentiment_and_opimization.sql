@@ -49,3 +49,19 @@ UNION ALL
     ORDER BY sales DESC
     LIMIT 5
 );
+
+-- 3. The longer the product, is it dominating in sales or stagnating
+SELECT CURRENT_DATE
+
+WITH days_elapsed AS (
+	SELECT
+		product_name,
+		sales,
+		date_added,
+		(CURRENT_DATE - date_added) AS days_elapsed
+	FROM products
+)
+SELECT 
+	product_name,
+	ROUND(CAST((sales::real / days_elapsed) AS numeric), 2) AS daily_sales_rate
+FROM days_elapsed
